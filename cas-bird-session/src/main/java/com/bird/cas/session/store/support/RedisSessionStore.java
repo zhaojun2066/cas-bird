@@ -20,7 +20,7 @@ public class RedisSessionStore implements SessionStore {
 
     private RedisManager redisManager;
 
-    private String SESSION_PREFIX = PubConstant.SESSION_PREFIX;
+    private static final String SESSION_PREFIX = PubConstant.SESSION_PREFIX;
 
     public RedisSessionStore(RedisManager redisManager) {
         this.redisManager = redisManager;

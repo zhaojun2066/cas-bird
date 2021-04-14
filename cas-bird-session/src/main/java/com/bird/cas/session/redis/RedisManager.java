@@ -21,6 +21,7 @@ public class RedisManager {
 
     private RedisConfig redisConfig;
 
+
     public RedisManager(RedisConfig redisConfig) {
         this.redisConfig = redisConfig;
         this.initCluster();

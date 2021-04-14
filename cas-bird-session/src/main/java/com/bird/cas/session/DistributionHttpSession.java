@@ -19,15 +19,11 @@ import static com.bird.cas.common.PubConstant.*;
  **/
 public class DistributionHttpSession implements HttpSession, Serializable {
 
-    public static final int DEFAULT_MAX_INACTIVE_INTERVAL_SECONDS = 3600;
-
-
-
     private String id = null;
-    private long creationTime = 0l;
+    private long creationTime = 0L;
     private long lastAccessedTime = creationTime;
 
-    private static int maxInactiveInterval;
+    private static int maxInactiveInterval = 3600;
 
 
     private SessionStore sessionStore; // session具体存储的实现
