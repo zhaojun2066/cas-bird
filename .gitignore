@@ -33,3 +33,4 @@ logs/
 Thumbs.db
 
 *.log.*
+*.logs.*

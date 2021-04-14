@@ -51,9 +51,9 @@ public class PubConstant {
 
     /*****************redis session*****************************/
     public static final String SESSION_PREFIX = "cas:bird:client:session:";
-    public static final byte [] CREATION_TIME = encode("creationTime");
-    public static final byte [] LAST_ACCESSED_TIME = encode("lastAccessedTime");
-    public static final byte [] MAX_INACTIVE_INTERVAL = encode("maxInactiveInterval");
+    public static final String  CREATION_TIME = "creationTime";
+    public static final String  LAST_ACCESSED_TIME = "lastAccessedTime";
+    public static final String MAX_INACTIVE_INTERVAL = "maxInactiveInterval";
 
 
     public static final String PREFIX_GT_KEY = "cas:bird:core:gt:";
