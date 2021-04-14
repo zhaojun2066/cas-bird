@@ -12,29 +12,34 @@ public interface SessionStore {
 
     /**
      * 设置属性
+     * @param sessionId
      * @param name
      * @param value
      */
-    void setAttribute(String name, Object value) ;
+    void setAttribute(String sessionId, String name, Object value) ;
 
     /**
      * 获取属性值
+     *
+     * @param sessionId
      * @param name
      * @return
      */
-    Object getAttribute(String name) ;
+    Object getAttribute(String sessionId, String name) ;
 
     /**
      * 删除属性
+     * @param sessionId
      * @param name
      */
-    void removeAttribute(String name) ;
+    void removeAttribute(String sessionId, String name) ;
 
     /**
      * 获取所有属性名称
      * @return
+     * @param sessionId
      */
-    List<String> getAttributeNames() ;
+    List<String> getAttributeNames(String sessionId) ;
 
     /**
      * 删除session,那么session 关联的所有属性都被被删除，这个最好使用就是redis 的 hash 来存储

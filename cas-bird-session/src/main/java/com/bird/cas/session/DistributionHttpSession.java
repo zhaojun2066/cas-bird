@@ -43,7 +43,6 @@ public class DistributionHttpSession implements HttpSession, Serializable {
         this.sessionStore = sessionStore;
         this.servletContext = servletContext;
         this.refresh();// 刷新session 时长
-
     }
 
     public DistributionHttpSession(String sessionId,SessionStore sessionStore, ServletContext servletContext) {
@@ -52,7 +51,6 @@ public class DistributionHttpSession implements HttpSession, Serializable {
         this.sessionStore = sessionStore;
         this.servletContext = servletContext;
         this.refresh();// 刷新session 时长
-
     }
 
     public void setCreationTime(long time){
@@ -86,7 +84,7 @@ public class DistributionHttpSession implements HttpSession, Serializable {
 
     @Override
     public void setMaxInactiveInterval(int interval) {
-        this.sessionStore.setAttribute(MAX_INACTIVE_INTERVAL,interval);
+        this.sessionStore.setAttribute(this.id, MAX_INACTIVE_INTERVAL, interval);
     }
 
     @Override
@@ -102,7 +100,7 @@ public class DistributionHttpSession implements HttpSession, Serializable {
 
     @Override
     public Object getAttribute(String name) {
-        return this.sessionStore.getAttribute(name);
+        return this.sessionStore.getAttribute(this.id, name);
     }
 
     @Override
@@ -112,12 +110,12 @@ public class DistributionHttpSession implements HttpSession, Serializable {
 
     @Override
     public Enumeration<String> getAttributeNames() {
-        return Collections.enumeration(this.sessionStore.getAttributeNames());
+        return Collections.enumeration(this.sessionStore.getAttributeNames(this.id));
     }
 
     @Override
     public String[] getValueNames() {
-        List<String> names = this.sessionStore.getAttributeNames();
+        List<String> names = this.sessionStore.getAttributeNames(this.id);
         if (names!=null){
            return names.toArray(new String[0]);
         }
@@ -127,22 +125,22 @@ public class DistributionHttpSession implements HttpSession, Serializable {
 
     @Override
     public void setAttribute(String name, Object value) {
-        this.sessionStore.setAttribute(name, value);
+        this.sessionStore.setAttribute(this.id, name, value);
     }
 
     @Override
     public void putValue(String name, Object value) {
-        this.sessionStore.setAttribute(name, value);
+        this.sessionStore.setAttribute(this.id, name, value);
     }
 
     @Override
     public void removeAttribute(String name) {
-        this.sessionStore.removeAttribute(name);
+        this.sessionStore.removeAttribute(this.id, name);
     }
 
     @Override
     public void removeValue(String name) {
-        this.sessionStore.removeAttribute(name);
+        this.sessionStore.removeAttribute(this.id, name);
     }
 
     @Override
