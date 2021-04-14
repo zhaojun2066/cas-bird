@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>demo</title>
+</head>
+<body>
+
+<form method="post" id="fm1" action="/login" htmlEscape="true">
+    <div class="login-title">账户登录</div>
+    <div class="login-error absolute">
+        <p class="errorWords hideElement" style="margin:0;" th:text="${error}"></p>
+        <!--错误提示 End-->
+    </div>
+    <div class="login-box absolute">
+        <div class="input-box account clearfix">
+            <input required type="text" id="username" name="username" tabindex="1" placeholder="请输入会员号/绑定手机/绑定邮箱" onblur="" />
+        </div>
+        <div class="input-box password clearfix">
+            <input required type="password" id="password" size="25" tabindex="2" path="password" name="password" htmlEscape="true" placeholder="请输入登录密码" />
+        </div>
+    </div>
+    <div class="login-bottom-box absolute">
+        <input type="submit" class="input-box-button m20" value="立即登录" />
+    </div>
+
+
+    <input type="hidden" name="service" th:value="${service}" />
+    <input type="hidden" name="_eventId" value="submit" />
+</form>
+
+</body>
+</html>

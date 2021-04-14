@@ -1,0 +1,62 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: cas-brid-server-demo
+  thymeleaf:
+    encoding: UTF-8
+    mode: HTML5
+  resources:
+    static-locations: classpath:/static
+  mvc:
+    favicon:
+      enabled: false
+
+
+---
+spring:
+  profiles: local
+  redis:
+    timeout: 3000
+#    password: redis@q1w2e3
+    jedis:
+      pool:
+        minIdle: 5
+        maxIdle: 10 #最大空闲数
+        maxTotal: 25 #控制一个pool可分配多少个jedis实例,用来替换上面的redis.maxActive,如果是jedis 2.4以后用该属性
+        maxWaitMillis: 1000 #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
+        minEvictableIdleTimeMillis: 300000 #连接的最小空闲时间 默认1800000毫秒(30分钟)
+        timeBetweenEvictionRunsMillis: 30000 #逐出扫描的时间间隔(毫秒) 如果为负数,则不运行逐出线程, 默认-1
+        testOnBorrow: true #是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个
+        testWhileIdle: true #在空闲时检查有效性, 默认false
+    cluster:
+      nodes: 10.12.40.253:7000, 10.12.40.252:7000, 10.12.40.251:7000
+      max-redirects: 2
+
+
+
+server:
+  port: 9200
+
+
+bird:
+  cas:
+    gtExpireTime: 10080
+    stExpireTime: 300
+    correlationSTAndGTExpireTime: 300
+    gtClientExpireTime: 10090
+    passwordEncode: false
+    cookieSecure: false
+    asynctask: # 异步通知接入系统登出操作
+      corePoolSize: 30
+      maxPoolSize: 1000
+      queueCapacity: 3000
+      waitForTasksToCompleteOnShutdown: true
+      awaitTerminationSeconds: 3000
+      ThreadNamePrefix: 300-sso-asynctask-
+    whiteDomains:
+      - "localhost"
+      - "www.baidu.com"
+      - "localhost:9200"
+log:
+  path: ${LOG_PATH:logs}
