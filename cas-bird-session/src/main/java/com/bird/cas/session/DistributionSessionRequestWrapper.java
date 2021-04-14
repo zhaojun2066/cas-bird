@@ -1,6 +1,7 @@
 package com.bird.cas.session;
 
 import com.bird.cas.common.utils.CommonUtils;
+import com.bird.cas.common.utils.CookieUtil;
 import com.bird.cas.common.utils.URLUtil;
 import com.bird.cas.session.store.SessionStoreFactory;
 import com.bird.cas.session.store.StoreType;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.MalformedURLException;
+
+import static com.bird.cas.common.PubConstant.SESSION_ID_COOKIE_KEY;
 
 /**
  * @program: cas-bird
@@ -44,6 +47,7 @@ public class DistributionSessionRequestWrapper extends HttpServletRequestWrapper
         }else {
             HttpSession httpSession = new DistributionHttpSession(sessionId, SessionStoreFactory.getSessionStore(StoreType.REDIS),request.getServletContext());
             this.sessionId = httpSession.getId();
+            CookieUtil.set(response,getFirstLevelDomain(), SESSION_ID_COOKIE_KEY,sessionId,"/",false);
         }
         return null;
     }

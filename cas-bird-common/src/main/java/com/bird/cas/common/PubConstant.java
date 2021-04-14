@@ -43,7 +43,7 @@ public class PubConstant {
 
     /***************cas client session ************************/
     public static final String SESSION_USER_KEY = "currentUser";
-    public static final String SESSION_ID_COOKIE_KEY = "CEST";
+    public static final String SESSION_ID_COOKIE_KEY = "BIRD-ST"; // TODO: 最好可配置
 
     /***************cas client redirect url********************/
     public static final String BACK_URL_PARAM = "backurl";
