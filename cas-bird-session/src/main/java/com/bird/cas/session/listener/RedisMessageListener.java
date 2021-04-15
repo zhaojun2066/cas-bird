@@ -41,7 +41,6 @@ public class RedisMessageListener extends JedisPubSub {
             }else if ("__keyevent@0__:set".equals(channel)){
                 this.httpSessionListener.sessionCreated(event);
             }
-
         }
     }
 }
