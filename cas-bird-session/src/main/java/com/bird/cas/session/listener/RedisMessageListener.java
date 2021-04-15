@@ -35,7 +35,13 @@ public class RedisMessageListener extends JedisPubSub {
         if(!CommonUtils.isNullString(sessionId)){
             HttpSession httpSession = new DistributionHttpSession(sessionId);
             HttpSessionEvent event = new HttpSessionEvent(httpSession);
-            this.httpSessionListener.sessionDestroyed(event);
+
+            if ("__keyevent@0__:expired".equals(channel) || "__keyevent@0__:del" .equals(channel)){
+                this.httpSessionListener.sessionDestroyed(event);
+            }else if ("__keyevent@0__:set".equals(channel)){
+                this.httpSessionListener.sessionCreated(event);
+            }
+
         }
     }
 }
