@@ -26,7 +26,7 @@ public class DistributionHttpSession implements HttpSession, Serializable {
     private static int maxInactiveInterval = 3600;
 
 
-    private SessionStore sessionStore; // session具体存储的实现
+    private SessionStore sessionStore; // session具体存储的实现，todo: 通过工具类获得
 
 
     private ServletContext servletContext;

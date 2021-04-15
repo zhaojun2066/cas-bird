@@ -13,18 +13,22 @@ import com.bird.cas.session.store.support.RedisSessionStore;
 public class SessionStoreFactory {
 
 
-    private static final RedisConfig redisConfig;
-    private static final RedisManager redisManager ;
+    private static  RedisManager redisManager ;
 
-    static {
-        redisConfig = new RedisConfig();
+
+    private static RedisSessionStore redisSessionStore;
+
+
+    private static void createRedisSessionStore(RedisConfig redisConfig){
         redisManager = new RedisManager(redisConfig);
+        redisSessionStore = new RedisSessionStore(redisManager);
     }
+
 
     public static SessionStore  getSessionStore(StoreType storeType){
         switch (storeType) {
             case REDIS:
-                return new RedisSessionStore(redisManager);
+                return redisSessionStore;
             default:
                 return null;
         }
