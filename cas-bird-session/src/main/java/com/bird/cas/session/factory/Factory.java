@@ -1,10 +1,14 @@
 package com.bird.cas.session.factory;
 
+import com.bird.cas.session.DistributionHttpSession;
 import com.bird.cas.session.config.SessionConfig;
 import com.bird.cas.session.redis.RedisConfig;
 import com.bird.cas.session.redis.RedisManager;
 import com.bird.cas.session.store.SessionStore;
 import com.bird.cas.session.store.support.RedisSessionStore;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 /**
  * @program: cas-bird
@@ -57,6 +61,14 @@ public class Factory {
 
     public static SessionStore  getSessionStore(){
         return  sessionStore;
+    }
+
+
+    public static HttpSession createHttpSession(String sessionId, ServletContext servletContext){
+        return  new DistributionHttpSession(sessionId,servletContext);
+    }
+    public static HttpSession createHttpSession(ServletContext servletContext){
+        return  new DistributionHttpSession(servletContext);
     }
 
 }

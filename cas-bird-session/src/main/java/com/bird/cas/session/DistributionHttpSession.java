@@ -1,6 +1,7 @@
 package com.bird.cas.session;
 
 import com.bird.cas.common.utils.CommonUtils;
+import com.bird.cas.session.factory.Factory;
 import com.bird.cas.session.store.SessionStore;
 
 import javax.servlet.ServletContext;
@@ -23,10 +24,10 @@ public class DistributionHttpSession implements HttpSession, Serializable {
     private long creationTime = 0L;
     private long lastAccessedTime = creationTime;
 
-    private static int maxInactiveInterval = 3600;
+    private static int maxInactiveInterval = Factory.getSessionConfig().getSessionTimeout();
 
 
-    private SessionStore sessionStore; // session具体存储的实现
+    private static SessionStore sessionStore = Factory.getSessionStore(); // session具体存储的实现
 
 
     private ServletContext servletContext;
@@ -35,19 +36,22 @@ public class DistributionHttpSession implements HttpSession, Serializable {
         this.id = id;
     }
 
-    public DistributionHttpSession(SessionStore sessionStore, ServletContext servletContext) {
+    public DistributionHttpSession( ServletContext servletContext) {
         this.id = CommonUtils.uuid();
         this.creationTime = System.currentTimeMillis();
         this.lastAccessedTime = creationTime;
-        this.sessionStore = sessionStore;
         this.servletContext = servletContext;
-        this.refresh();// 刷新session 时长
+        this.save();
     }
 
-    public DistributionHttpSession(String sessionId,SessionStore sessionStore, ServletContext servletContext) {
+    /**
+     * 说明session已经存在
+     * @param sessionId
+     * @param servletContext
+     */
+    public DistributionHttpSession(String sessionId,ServletContext servletContext) {
         this.id =sessionId;
         this.lastAccessedTime = System.currentTimeMillis();// todo: set to store
-        this.sessionStore = sessionStore;
         this.servletContext = servletContext;
         this.refresh();// 刷新session 时长
     }
@@ -152,8 +156,13 @@ public class DistributionHttpSession implements HttpSession, Serializable {
         return this.sessionStore.exitSession(this.id);
     }
 
-    private void refresh(){
+    private void save(){
         this.setCreationTime(this.creationTime);
+        this.setLastAccessedTime(this.lastAccessedTime);
+        this.sessionStore.expire(this.id,maxInactiveInterval);
+    }
+
+    private void refresh(){
         this.setLastAccessedTime(this.lastAccessedTime);
         this.sessionStore.expire(this.id,maxInactiveInterval);
     }
