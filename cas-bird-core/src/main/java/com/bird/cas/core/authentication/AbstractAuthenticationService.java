@@ -14,6 +14,7 @@ import com.bird.cas.core.utils.AuthResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +34,9 @@ public abstract class AbstractAuthenticationService implements Authentication {
 
     @Autowired
     private CasConfigProperties casConfig;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     /**
      * 认证之前调用
@@ -136,6 +140,10 @@ public abstract class AbstractAuthenticationService implements Authentication {
 
     public void logout(String gt){
         ticketManager.logoutGT(gt);// 注销
+        //todo:通知接入系统，session销毁,注意重试，和异步操作
+
+        // 删除gt 关联的 SystemClient
+        ticketManager.removeGTSystemClient(gt);
     }
 
 

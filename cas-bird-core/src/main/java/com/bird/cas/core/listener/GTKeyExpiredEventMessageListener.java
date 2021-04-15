@@ -1,5 +1,6 @@
 package com.bird.cas.core.listener;
 
+import com.bird.cas.core.authentication.AbstractAuthenticationService;
 import com.bird.cas.core.ticket.TicketManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,10 @@ public class GTKeyExpiredEventMessageListener implements MessageListener {
     @Autowired
     private TicketManager ticketManager;
 
+
+    @Autowired
+    private AbstractAuthenticationService abstractAuthenticationService;
+
     @Override
     public void onMessage(Message message, byte[] pattern) {
         String expiredMsg = message.toString();
@@ -29,7 +34,7 @@ public class GTKeyExpiredEventMessageListener implements MessageListener {
         // 判断是否为GT 的失效
         if (expiredMsg.startsWith(PREFIX_GT_KEY)){
             String gt = expiredMsg.replace(PREFIX_GT_KEY,"");
-            ticketManager.logoutGT(gt); // 注销gt
+            abstractAuthenticationService.logout(gt); // 注销gt
             if (log.isDebugEnabled()){
                 log.debug(" expire gt=> {}" ,gt);
             }

@@ -116,6 +116,12 @@ public class TicketManager {
     }
 
 
+    public void removeGTSystemClient(String gt){
+        String key = getGTClientKey(gt);
+        redisTemplateObject.delete(key);
+    }
+
+
     public void  addGTSystemClient(String gt,SystemClient systemClient){
         String key = getGTClientKey(gt);
         setOperations.add(key,systemClient);
