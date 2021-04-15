@@ -1,14 +1,18 @@
 package com.bird.cas.session.redis;
 
 import com.bird.cas.common.utils.CommonUtils;
+import com.bird.cas.session.config.SessionConfig;
 import com.bird.cas.session.exception.SessionException;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPoolConfig;
+import com.bird.cas.session.listener.RedisMessageListener;
+import redis.clients.jedis.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @program: cas-bird
@@ -21,13 +25,17 @@ public class RedisManager {
 
     private RedisConfig redisConfig;
 
+    private SessionConfig sessionConfig;
 
-    public RedisManager(RedisConfig redisConfig) {
+
+    public RedisManager(RedisConfig redisConfig, SessionConfig sessionConfig) {
         this.redisConfig = redisConfig;
+        this.sessionConfig = sessionConfig;
         this.initCluster();
+        this.subscribe();
     }
 
-    public  void initCluster(){
+    private   void initCluster(){
 
         List<RedisHost> hostList = redisConfig.getHosts();
         if (hostList.isEmpty()){
@@ -56,6 +64,40 @@ public class RedisManager {
             jedisCluster = new JedisCluster(nodes,2000,2000,3,pwd,poolConfig);
         }
 
+    }
+
+    private   ExecutorService exec;
+
+    private  JedisPubSub jedisPubSub;
+
+
+    private   void subscribe(){
+        jedisPubSub = new RedisMessageListener(sessionConfig.getSessionListener());
+        exec = Executors.newFixedThreadPool(10,
+                new ThreadFactory() {
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        Thread t = Executors.defaultThreadFactory().newThread(r);
+                        t.setDaemon(true);
+                        return t;
+                    }
+                });
+        // 监听每个redis 节点 key 的失效事件
+        Map<String, JedisPool> clusterNodes =  getJedisCluster().getClusterNodes();
+        for (String key : clusterNodes.keySet()) {
+            JedisPool jedisPool = clusterNodes.get(key);
+            final Jedis jedisConn = jedisPool.getResource();
+            try {
+                exec.submit(() -> {
+                    jedisConn.subscribe(jedisPubSub, "__keyevent@0__:expired");
+                    jedisConn.subscribe(jedisPubSub, "__keyevent@0__:del");
+                    jedisConn.subscribe(jedisPubSub, "__keyevent@0__:set");
+                });
+
+            }finally {
+                //  jedisConn.close();
+            }
+        }
     }
 
     public  JedisCluster getJedisCluster(){

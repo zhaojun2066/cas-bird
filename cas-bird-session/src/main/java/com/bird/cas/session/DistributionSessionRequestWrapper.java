@@ -3,8 +3,7 @@ package com.bird.cas.session;
 import com.bird.cas.common.utils.CommonUtils;
 import com.bird.cas.common.utils.CookieUtil;
 import com.bird.cas.common.utils.URLUtil;
-import com.bird.cas.session.store.SessionStoreFactory;
-import com.bird.cas.session.store.StoreType;
+import com.bird.cas.session.factory.Factory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
@@ -43,9 +42,9 @@ public class DistributionSessionRequestWrapper extends HttpServletRequestWrapper
     @Override
     public HttpSession getSession(boolean create) {
         if (CommonUtils.isNullString(sessionId)) {
-            return new DistributionHttpSession(SessionStoreFactory.getSessionStore(StoreType.REDIS),request.getServletContext());
+            return new DistributionHttpSession(Factory.getSessionStore(),request.getServletContext());
         }else {
-            HttpSession httpSession = new DistributionHttpSession(sessionId, SessionStoreFactory.getSessionStore(StoreType.REDIS),request.getServletContext());
+            HttpSession httpSession = new DistributionHttpSession(sessionId, Factory.getSessionStore(),request.getServletContext());
             this.sessionId = httpSession.getId();
             CookieUtil.set(response,getFirstLevelDomain(), SESSION_ID_COOKIE_KEY,sessionId,"/",false);
         }

@@ -1,6 +1,10 @@
 package com.bird.cas.session.config;
 
-import com.bird.cas.session.store.StoreType;
+import com.bird.cas.common.utils.CommonUtils;
+import com.bird.cas.session.redis.RedisConfig;
+
+import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionListener;
 
 /**
  * @program: cas-bird
@@ -13,15 +17,74 @@ public class SessionConfig {
     //
     private String sessionIdName;
 
-    private StoreType storeType;
+
+    private int sessionTimeout = 24*60*3600;
+
+    private String sessionListenerClass;
+    private String sessionAttributeListenerClass;
 
 
-    public StoreType getStoreType() {
-        return storeType;
+    private HttpSessionListener sessionListener;
+    private HttpSessionAttributeListener sessionAttributeListener;
+
+
+    private RedisConfig redisConfig;
+
+    public RedisConfig getRedisConfig() {
+        return redisConfig;
     }
 
-    public void setStoreType(StoreType storeType) {
-        this.storeType = storeType;
+    public void setRedisConfig(RedisConfig redisConfig) {
+        this.redisConfig = redisConfig;
+    }
+
+    public int getSessionTimeout() {
+        return sessionTimeout;
+    }
+
+    public void setSessionTimeout(int sessionTimeout) {
+        this.sessionTimeout = sessionTimeout;
+    }
+
+    public String getSessionListenerClass() {
+        return sessionListenerClass;
+    }
+
+    public void setSessionListenerClass(String sessionListenerClass) {
+        this.sessionListenerClass = sessionListenerClass;
+        if (!CommonUtils.isNullString(sessionListenerClass)){
+            try {
+                Class clazz = Class.forName(sessionListenerClass);
+                sessionAttributeListener = (HttpSessionAttributeListener)clazz.newInstance();
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String getSessionAttributeListenerClass() {
+        return sessionAttributeListenerClass;
+    }
+
+    public void setSessionAttributeListenerClass(String sessionAttributeListenerClass) {
+        this.sessionAttributeListenerClass = sessionAttributeListenerClass;
+        if (!CommonUtils.isNullString(sessionAttributeListenerClass)){
+            try {
+                Class clazz = Class.forName(sessionAttributeListenerClass.trim());
+                sessionAttributeListener = (HttpSessionAttributeListener)clazz.newInstance();
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public HttpSessionListener getSessionListener() {
+        return sessionListener;
+    }
+
+    public HttpSessionAttributeListener getSessionAttributeListener() {
+        return sessionAttributeListener;
     }
 
     public String getSessionIdName() {
