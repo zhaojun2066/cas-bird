@@ -32,7 +32,6 @@
         <dependency>
             <groupId>com.bird.cas</groupId>
             <artifactId>cas-bird-common</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>

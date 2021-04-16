@@ -26,9 +26,18 @@ public class SessionConfig {
 
     private HttpSessionListener sessionListener;
     private HttpSessionAttributeListener sessionAttributeListener;
+    private String sessionIdSalt; // 加密sessionId 的盐
 
 
     private RedisConfig redisConfig;
+
+    public String getSessionIdSalt() {
+        return sessionIdSalt;
+    }
+
+    public void setSessionIdSalt(String sessionIdSalt) {
+        this.sessionIdSalt = sessionIdSalt;
+    }
 
     public RedisConfig getRedisConfig() {
         return redisConfig;

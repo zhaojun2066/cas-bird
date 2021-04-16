@@ -17,6 +17,10 @@ public class PubConstant {
     public static final String LOGOUT_SUCCESS_PAGE = "logout_success";
 
 
+    public static final String DESTROY_ST_PARAM_NAME = "destroySt";
+    public static final String ST_PARAM_NAME = "st";
+
+
     /*************cas server api**************/
     public static final String CAS_SERVER_CHECK_TICKET_API = "/checkSt";
     public static final String CAS_SERVER_LOGOUT_API = "/logout";
@@ -34,7 +38,7 @@ public class PubConstant {
 
     /*********cas server cookie******/
 
-    public static final String GT_COOKIE_KEY = "CEGT";
+    public static final String GT_COOKIE_KEY = "BIRD-GT";
     public static final String GT_COOKIE_PATH = "/";
     public static final String SERVICE_PARAM_NAME = "service";
 
@@ -44,6 +48,9 @@ public class PubConstant {
     /***************cas client session ************************/
     public static final String SESSION_USER_KEY = "currentUser";
     public static final String SESSION_ID_COOKIE_KEY = "BIRD-ST"; // TODO: 最好可配置
+    public static final String LOGOUT_REQUEST = "logoutRequest";
+
+
 
     /***************cas client redirect url********************/
     public static final String BACK_URL_PARAM = "backurl";
@@ -51,6 +58,7 @@ public class PubConstant {
 
     /*****************redis session*****************************/
     public static final String SESSION_PREFIX = "cas:bird:client:session:";
+    public static final String SESSION_ST_PREFIX = "cas:bird:client:st:"; // 这个session 和那个st关联
     public static final String  CREATION_TIME = "creationTime";
     public static final String  LAST_ACCESSED_TIME = "lastAccessedTime";
     public static final String MAX_INACTIVE_INTERVAL = "maxInactiveInterval";
@@ -66,6 +74,9 @@ public class PubConstant {
     public static final String IS_SUCCESS="is_success";
     public static final String FAIL_REASON="fail_reason";
     public static final String PRODUCT_NAME="product_name";
+
+
+
 
 
 

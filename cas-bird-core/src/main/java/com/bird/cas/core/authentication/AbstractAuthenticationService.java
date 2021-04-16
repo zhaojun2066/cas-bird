@@ -1,10 +1,11 @@
 package com.bird.cas.core.authentication;
 
+import com.bird.cas.common.dto.UserPrincipal;
+import com.bird.cas.common.query.CheckStQuery;
 import com.bird.cas.core.authentication.model.Credentials;
 import com.bird.cas.core.authentication.model.Principal;
 import com.bird.cas.core.config.CasConfigProperties;
 import com.bird.cas.core.exception.CasException;
-import com.bird.cas.core.query.CheckStQuery;
 import com.bird.cas.core.query.LoginQuery;
 import com.bird.cas.core.ticket.GTInfo;
 import com.bird.cas.core.ticket.STInfo;
@@ -152,21 +153,24 @@ public abstract class AbstractAuthenticationService implements Authentication {
      * @param stQuery
      * @return
      */
-    public SystemClient checkSt(CheckStQuery stQuery){
-        SystemClient systemClient = null;
+    public UserPrincipal checkSt(CheckStQuery stQuery){
+        UserPrincipal  userPrincipal  = new UserPrincipal();
         String st = stQuery.getSt();
         STInfo stInfo = ticketManager.getSTInfoByST(st);
         if (stInfo!=null){
             stInfo.setSt(st);
             String gt = stInfo.getGt();
-            systemClient = new SystemClient();
+            SystemClient systemClient = new SystemClient();
             systemClient.setIp(stQuery.getIp());
             systemClient.setPort(stQuery.getPort());
             systemClient.setSt(st);
             // 关联接入的系统，在gt 失效的时候，通知接入系统销毁session
             ticketManager.addGTSystemClient(gt,systemClient);
+            userPrincipal.setId(stInfo.getId());
+            userPrincipal.setAttributes(stInfo.getAttributes());
+            userPrincipal.setSt(st);
         }
-        return systemClient;
+        return userPrincipal;
     }
 
 

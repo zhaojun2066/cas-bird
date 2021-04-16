@@ -64,10 +64,14 @@ public class Factory {
     }
 
 
-    public static HttpSession createHttpSession(String sessionId, ServletContext servletContext){
-        return  new DistributionHttpSession(sessionId,servletContext);
+    public static HttpSession createNewHttpSession(String sessionId, ServletContext servletContext){
+        return  new DistributionHttpSession(true,sessionId,servletContext);
     }
-    public static HttpSession createHttpSession(ServletContext servletContext){
+    public static HttpSession createExitHttpSession(String sessionId, ServletContext servletContext){
+        return  new DistributionHttpSession(false,sessionId,servletContext);
+    }
+
+    public static HttpSession createNewHttpSession(ServletContext servletContext){
         return  new DistributionHttpSession(servletContext);
     }
 

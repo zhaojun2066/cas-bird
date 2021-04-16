@@ -21,7 +21,29 @@
         <module>cas-bird-common</module>
         <module>cas-brid-server-demo</module>
         <module>cas-bird-session</module>
+        <module>cas-bird-client</module>
     </modules>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.bird.cas</groupId>
+                <artifactId>cas-bird-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bird.cas</groupId>
+                <artifactId>cas-bird-session</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bird.cas</groupId>
+                <artifactId>cas-bird-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 
 </project>

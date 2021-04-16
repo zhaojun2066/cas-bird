@@ -41,13 +41,16 @@ public class DistributionSessionRequestWrapper extends HttpServletRequestWrapper
 
     @Override
     public HttpSession getSession(boolean create) {
-        if (CommonUtils.isNullString(sessionId)) {
-            return Factory.createHttpSession(request.getServletContext());
-        }else {
-            HttpSession httpSession = Factory.createHttpSession(sessionId, request.getServletContext());
-            this.sessionId = httpSession.getId();
-            CookieUtil.set(response,getFirstLevelDomain(), SESSION_ID_COOKIE_KEY,sessionId,"/",false);
+        HttpSession httpSession = null;
+        if (!CommonUtils.isNullString(sessionId)) {
+            httpSession = Factory.createExitHttpSession(sessionId,request.getServletContext());
+        } else if (create){
+            Factory.createNewHttpSession(request.getServletContext());
+        } else {
+           return null;
         }
+        this.sessionId = httpSession.getId();
+        CookieUtil.set(response,getFirstLevelDomain(), SESSION_ID_COOKIE_KEY,sessionId,"/",false);
         return null;
     }
 

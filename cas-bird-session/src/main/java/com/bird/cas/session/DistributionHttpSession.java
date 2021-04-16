@@ -26,9 +26,7 @@ public class DistributionHttpSession implements HttpSession, Serializable {
 
     private static int maxInactiveInterval = Factory.getSessionConfig().getSessionTimeout();
 
-
     private static SessionStore sessionStore = Factory.getSessionStore(); // session具体存储的实现
-
 
     private ServletContext servletContext;
 
@@ -44,16 +42,18 @@ public class DistributionHttpSession implements HttpSession, Serializable {
         this.save();
     }
 
-    /**
-     * 说明session已经存在
-     * @param sessionId
-     * @param servletContext
-     */
-    public DistributionHttpSession(String sessionId,ServletContext servletContext) {
+
+
+    public DistributionHttpSession(boolean isNew,String sessionId,ServletContext servletContext) {
         this.id =sessionId;
         this.lastAccessedTime = System.currentTimeMillis();// todo: set to store
         this.servletContext = servletContext;
-        this.refresh();// 刷新session 时长
+        if (isNew){
+            this.creationTime = System.currentTimeMillis();
+            this.save();// 刷新session 时长
+        }else {
+            this.refresh();
+        }
     }
 
     public void setCreationTime(long time){

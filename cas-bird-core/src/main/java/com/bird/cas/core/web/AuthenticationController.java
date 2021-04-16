@@ -1,11 +1,12 @@
 package com.bird.cas.core.web;
 
 import com.bird.cas.common.PubConstant;
+import com.bird.cas.common.dto.UserPrincipal;
+import com.bird.cas.common.query.CheckStQuery;
 import com.bird.cas.common.utils.CookieUtil;
 import com.bird.cas.core.authentication.AbstractAuthenticationService;
 import com.bird.cas.core.config.CasConfigProperties;
 import com.bird.cas.core.context.LoginContextHandler;
-import com.bird.cas.core.query.CheckStQuery;
 import com.bird.cas.core.query.LoginQuery;
 import com.bird.cas.core.ticket.SystemClient;
 import com.bird.cas.core.utils.AuthResult;
@@ -118,9 +119,9 @@ public class AuthenticationController {
 
 
     @PostMapping("/checkST")
-    public Response<SystemClient> checkST(CheckStQuery checkStQuery){
-        SystemClient systemClient = authenticationService.checkSt(checkStQuery);
-        return Response.ok(systemClient);
+    public UserPrincipal checkST(CheckStQuery checkStQuery){
+        UserPrincipal userPrincipal = authenticationService.checkSt(checkStQuery);
+        return userPrincipal;
     }
 
 
