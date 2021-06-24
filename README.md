@@ -80,7 +80,7 @@ spring:
   profiles: local
   redis:
     timeout: 3000
-#    password: redis@q1w2e3
+#    password: 
     jedis:
       pool:
         minIdle: 5
@@ -92,7 +92,7 @@ spring:
         testOnBorrow: true #是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个
         testWhileIdle: true #在空闲时检查有效性, 默认false
     cluster:
-      nodes: 10.12.40.253:7000, 10.12.40.252:7000, 10.12.40.251:7000
+      nodes:xxx:7000, xxx:7000, xxx:7000
       max-redirects: 2
 
 
